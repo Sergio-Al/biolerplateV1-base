@@ -4,7 +4,7 @@ const path = require("path");
 module.exports = {
   mode: "development",
   // where it should start
-  entry: "./src/playground/redux-101.js",
+  entry: "./src/playground/redux-101.js",// This line has been modified in the redux section of the react course
   // where it should end
   output: {
     path: path.join(__dirname, "public"),
