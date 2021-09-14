@@ -117,6 +117,23 @@ const filtersReducer = (state = filtersReducerDefaultState, actions) => {
   }
 };
 
+// timestampts
+
+// Get visible Expenses
+const getVisibleExpenses = (expenses, { text, sortBy, startDate, endDate }) => {
+  return expenses.filter((expense) => {
+    const startDateMatch =
+      typeof startDate !== "number" || expense.createdAt >= startDate;
+    const endDateMatch =
+      typeof endDate !== "number" || expense.createdAt <= endDate;
+    const textMatch =
+      typeof text !== "string" ||
+      expense.description.toLowerCase().includes(text.toLowerCase());
+
+    return startDateMatch && endDateMatch && textMatch;
+  });
+};
+
 // store creation
 const store = createStore(
   combineReducers({
@@ -126,29 +143,31 @@ const store = createStore(
 );
 
 store.subscribe(() => {
-  console.log(store.getState());
+  const state = store.getState();
+  const visibleExpenses = getVisibleExpenses(state.expenses, state.filters);
+  console.log(visibleExpenses);
 });
 
-// const expenseOne = store.dispatch(
-//   addExpense({ description: "Rent", amount: 100 })
-// );
-// const expenseTwo = store.dispatch(
-//   addExpense({ description: "Coffee", amount: 300 })
-// );
+const expenseOne = store.dispatch(
+  addExpense({ description: "Rent", amount: 100, createdAt: 1000 })
+);
+const expenseTwo = store.dispatch(
+  addExpense({ description: "Coffee", amount: 300, createdAt: -1000 })
+);
 
 // store.dispatch(removeExpense({ id: expenseOne.expense.id }));
 // store.dispatch(editExpense(expenseTwo.expense.id, { amount: 500 }));
 
-// store.dispatch(setTextFilter("rent"));
+store.dispatch(setTextFilter("ee"));
 // store.dispatch(setTextFilter());
 
 // store.dispatch(sortByAmount()); // amount
 // store.dispatch(sortByDate()); // date
 
-store.dispatch(setStartDate(125)); // startDate 125
-store.dispatch(setStartDate()); // undefined
+//store.dispatch(setStartDate(125)); // startDate 125
+// store.dispatch(setStartDate()); // undefined
 
-store.dispatch(setEndDate(1250)); // endDate 1250
+//store.dispatch(setEndDate(1250)); // endDate 1250
 
 const demoState = {
   expenses: [
