@@ -1,4 +1,5 @@
 // Get visible Expenses
+// first argument is an array of expenses
 export default (expenses, { text, sortBy, startDate, endDate }) => {
   return expenses
     .filter((expense) => {
