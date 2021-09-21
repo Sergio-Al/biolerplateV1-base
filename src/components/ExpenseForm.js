@@ -10,7 +10,7 @@ export default class ExpenseForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      note: props.expense ? props.expense.notes : "",
+      note: props.expense ? props.expense.note : "",
       description: props.expense ? props.expense.description : "",
       amount: props.expense ? (props.expense.amount / 100).toString() : "",
       createdAt: props.expense ? moment(props.expense.createdAt) : moment(),
@@ -40,7 +40,7 @@ export default class ExpenseForm extends React.Component {
     }
   };
   onFocusChange = ({ focused }) => {
-    this.setState(() => ({ calendaFocused: focused }));
+    this.setState(() => ({ calendarFocused: focused }));
   };
   onSumbit = (e) => {
     e.preventDefault();
