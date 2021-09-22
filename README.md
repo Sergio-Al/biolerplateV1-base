@@ -11,3 +11,11 @@ Steps for executing the app
 For production mode
 > 1. yarn run build
 ###### this will execute our principal html in our public folder
+
+# Git commands
+
+git init - Creating a new git repo
+git status - View the changes of your project code
+git add -  Add files to staging area
+git commit - Created new commit with files from staging area
+git log - View recent commits
