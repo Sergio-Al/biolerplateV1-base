@@ -13,17 +13,6 @@ import "react-dates/lib/css/_datepicker.css"; // this is from expenseform compon
 
 const store = ConfigureStore();
 
-console.log(store.getState());
-
-store.dispatch(addExpense({ description: "Water Bill", amount: 32 }));
-store.dispatch(addExpense({ description: "Gas Bill", createdAt: 1000 }));
-store.dispatch(addExpense({ description: "Rent", amount: 3432 }));
-
-const state = store.getState();
-const visibleExpenses = getVisibleExpenses(state.expenses, state.filters);
-
-console.log(visibleExpenses);
-
 const jsx = (
   <Provider store={store}>
     <AppRouter />
