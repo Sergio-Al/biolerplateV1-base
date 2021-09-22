@@ -12,7 +12,7 @@ module.exports = (env, argv) => {
     entry: "./src/app.js", // This line has been modified in the redux section of the react course
     // where it should end
     output: {
-      path: path.join(__dirname, "public"),
+      path: path.join(__dirname, "public", "dist"),
       // filename you can put anything name that you like
       filename: "bundle.js",
     },
@@ -42,6 +42,7 @@ module.exports = (env, argv) => {
     devServer: {
       contentBase: path.join(__dirname, "public"),
       historyApiFallback: true,
+      publicPath: "/dist/",
     },
   };
 };
