@@ -1,8 +1,6 @@
 import selectExpensesTotal from "../../selectors/expenses-total";
 import expenses from "../fixtures/expenses";
 
-console.log([].map((expense) => expense.amount));
-
 test("should return 0 if no expenses", () => {
   const totalExpenses = selectExpensesTotal([]);
   expect(totalExpenses).toBe(0);
