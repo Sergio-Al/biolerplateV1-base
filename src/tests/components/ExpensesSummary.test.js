@@ -4,14 +4,21 @@ import { ExpensesSummary } from "../../components/ExpensesSummary";
 import expenses from "../fixtures/expenses";
 import expensesTotal from "../../selectors/expenses-total";
 
-test("should render empty or zero with no expenses", () => {
+test("should correctly render ExpensesSummary with no expenses", () => {
   const wrapper = shallow(
     <ExpensesSummary expenseCount={[].length} expensesTotal={[]} />
   );
   expect(wrapper).toMatchSnapshot();
 });
 
-test("Should render expenses Summary correctly", () => {
+test("should correctly render ExpensesSummary with 1 expense", () => {
+  const wrapper = shallow(
+    <ExpensesSummary expenseCount={1} expensesTotal={234} />
+  );
+  expect(wrapper).toMatchSnapshot();
+});
+
+test("Should correctly render ExpensesSummary with multiple expenses", () => {
   const wrapper = shallow(
     <ExpensesSummary
       expenseCount={expenses.length}
