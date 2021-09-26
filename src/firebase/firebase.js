@@ -15,8 +15,28 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const appDatabase = getDatabase(app);
-const refDatabase = ref(appDatabase);
+let refDatabase = ref(appDatabase);
 
 set(refDatabase, {
   name: "Sergio Alejandro",
+  age: 23,
+  isSingle: true,
+  location: {
+    city: "La Paz",
+    country: "Bolivia",
+  },
+});
+
+// set(refDatabase, "this is my data");
+
+refDatabase = ref(appDatabase, "age");
+set(refDatabase, 24);
+
+refDatabase = ref(appDatabase, "location/city");
+set(refDatabase, "Cochabamba");
+
+refDatabase = ref(appDatabase, "attributes");
+set(refDatabase, {
+  weight: 76,
+  height: 173,
 });
