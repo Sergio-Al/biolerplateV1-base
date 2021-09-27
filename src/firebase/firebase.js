@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, remove } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQhqUnni7f7d-jZRxtpBjsuwUseSWlqCE",
@@ -17,6 +17,8 @@ const app = initializeApp(firebaseConfig);
 const appDatabase = getDatabase(app);
 let refDatabase = ref(appDatabase);
 
+// Adding content to the database
+
 set(refDatabase, {
   name: "Sergio Alejandro",
   age: 23,
@@ -25,18 +27,39 @@ set(refDatabase, {
     city: "La Paz",
     country: "Bolivia",
   },
-});
+})
+  .then(() => {
+    console.log("this worked well!");
+  })
+  .catch((e) => {
+    console.log("this failed!", e);
+  });
+
+// set(refDatabase, null); // setting null is remove all data
 
 // set(refDatabase, "this is my data");
 
-refDatabase = ref(appDatabase, "age");
-set(refDatabase, 24);
+// We are referencing to a specific value with 'ref' or creating if doesn't exists
+// refDatabase = ref(appDatabase, "age");
+// set(refDatabase, 24);
 
-refDatabase = ref(appDatabase, "location/city");
-set(refDatabase, "Cochabamba");
+// refDatabase = ref(appDatabase, "location/city");
+// set(refDatabase, "Cochabamba");
 
-refDatabase = ref(appDatabase, "attributes");
-set(refDatabase, {
-  weight: 76,
-  height: 173,
-});
+// refDatabase = ref(appDatabase, "attributes");
+// set(refDatabase, {
+//   weight: 76,
+//   height: 173,
+// })
+//   .then(() => {
+//     console.log("changing attributes worked!");
+//   })
+//   .catch((e) => {
+//     console.log("Changing attributes didn't worked well: ", e);
+//   });
+
+// Removing data
+// refDatabase = ref(appDatabase);
+// remove(refDatabase)
+//   .then(() => console.log("removed Data is Single"))
+//   .catch((e) => console.log("error while removing data", e));
