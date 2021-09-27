@@ -1,5 +1,14 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, remove, update } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  get,
+  set,
+  remove,
+  update,
+  onValue,
+  off,
+} from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQhqUnni7f7d-jZRxtpBjsuwUseSWlqCE",
@@ -17,27 +26,74 @@ const app = initializeApp(firebaseConfig);
 const appDatabase = getDatabase(app);
 let refDatabase = ref(appDatabase);
 
+// ***Getting content from firebase
+
+onValue(ref(appDatabase), (snapshot) => {
+  const value = snapshot.val();
+  console.log(`${value.name} is a ${value.job.title} at ${value.job.company}`);
+});
+
+setTimeout(() => {
+  set(ref(appDatabase, "job"), {
+    title: "Web Developer",
+    company: "Tesla",
+  });
+}, 3000);
+
+// const onValueChange = onValue(
+//   refDatabase,
+//   (snapshot) => {
+//     console.log(snapshot.val());
+//   },
+//   (e) => {
+//     console.log("Error with data fetching", e);
+//   }
+// );
+
+// setTimeout(() => {
+//   set(ref(appDatabase, "age"), 26);
+// }, 3500);
+
+// setTimeout(() => {
+//   off(ref(appDatabase), onValueChange);
+// }, 7000);
+
+// setTimeout(() => {
+//   set(ref(appDatabase, "age"), 28);
+// }, 10500);
+
+// onValue(
+//   ref(appDatabase, "location/city"),
+//   (snapshot) => {
+//     const val = snapshot.val();
+//     console.log(val);
+//   },
+//   {
+//     onlyOnce: true,
+//   }
+// );
+
 // ***Adding content to the database
 
-set(refDatabase, {
-  name: "Sergio Alejandro",
-  age: 23,
-  stressLevel: 8,
-  job: {
-    title: "Software Developer",
-    company: "Google",
-  },
-  location: {
-    city: "La Paz",
-    country: "Bolivia",
-  },
-})
-  .then(() => {
-    console.log("this worked well!");
-  })
-  .catch((e) => {
-    console.log("this failed!", e);
-  });
+// set(refDatabase, {
+//   name: "Sergio Alejandro",
+//   age: 23,
+//   stressLevel: 8,
+//   job: {
+//     title: "Software Developer",
+//     company: "Google",
+//   },
+//   location: {
+//     city: "La Paz",
+//     country: "Bolivia",
+//   },
+// })
+//   .then(() => {
+//     console.log("this worked well!");
+//   })
+//   .catch((e) => {
+//     console.log("this failed!", e);
+//   });
 
 // set(refDatabase, null); // setting null is remove all data
 
@@ -77,8 +133,8 @@ set(refDatabase, {
 //   isSingle: null, // removing data
 // });
 
-update(refDatabase, {
-  stressLevel: 9,
-  "job/company": "Amazon",
-  "location/city": "Seattle",
-});
+// update(refDatabase, {
+//   stressLevel: 9,
+//   "job/company": "Amazon",
+//   "location/city": "Seattle",
+// });
