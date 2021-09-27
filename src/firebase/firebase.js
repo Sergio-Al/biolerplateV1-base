@@ -9,6 +9,9 @@ import {
   onValue,
   off,
   push,
+  onChildRemoved,
+  onChildChanged,
+  onChildAdded,
 } from "firebase/database";
 
 const firebaseConfig = {
@@ -27,25 +30,60 @@ const app = initializeApp(firebaseConfig);
 const appDatabase = getDatabase(app);
 let expensesRef = ref(appDatabase, "expenses");
 
+// child_removed: execute the callback when a child id removed
+// captures the value deleted in snapshot
+onChildRemoved(ref(appDatabase, "expenses"), (snapshot) => {
+  console.log(snapshot.key, snapshot.val());
+});
+
+// child_changed: execute the callback when a child of the query (our ref([values])) has changed.
+// captures the value changed in snapshot
+onChildChanged(expensesRef, (snapshot) => {
+  console.log(snapshot.key, snapshot.val());
+});
+
+// child_added: execute the callback when a child is added (a new expense)
+onChildAdded(expensesRef, (snapshot) => {
+  console.log(snapshot.key, snapshot.val());
+});
+
+// onValue(
+//   expensesRef,
+//   (snapshot) => {
+//     const expenses = [];
+
+//     snapshot.forEach((childSnapshot) => {
+//       expenses.push({
+//         id: childSnapshot.key,
+//         ...childSnapshot.val(),
+//       });
+//     });
+
+//     console.log(expenses);
+//   },
+//   {
+//     onlyOnce: true,
+//   }
+// );
+
+// onValue(expensesRef, (snapshot) => {
+//   const expenses = [];
+
+//   snapshot.forEach((childSnapshot) => {
+//     expenses.push({
+//       id: childSnapshot.key,
+//       ...childSnapshot.val(),
+//     });
+//   });
+
+//   console.log(expenses);
+// });
+
 push(expensesRef, {
   description: "Gum",
   note: "This is a data",
   amount: 2343,
   createdAt: 34234200,
-});
-
-push(expensesRef, {
-  description: "Rent",
-  note: "This is data from rent",
-  amount: 233,
-  createdAt: 343242300,
-});
-
-push(expensesRef, {
-  description: "Credit Card",
-  note: "This is data from credit card",
-  amount: 34322,
-  createdAt: 343240000,
 });
 
 // remove(ref(appDatabase, "notes/-Mkc5CTZkelWV2qiWr75"));
