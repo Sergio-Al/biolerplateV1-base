@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, remove } from "firebase/database";
+import { getDatabase, ref, set, remove, update } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQhqUnni7f7d-jZRxtpBjsuwUseSWlqCE",
@@ -17,12 +17,16 @@ const app = initializeApp(firebaseConfig);
 const appDatabase = getDatabase(app);
 let refDatabase = ref(appDatabase);
 
-// Adding content to the database
+// ***Adding content to the database
 
 set(refDatabase, {
   name: "Sergio Alejandro",
   age: 23,
-  isSingle: true,
+  stressLevel: 8,
+  job: {
+    title: "Software Developer",
+    company: "Google",
+  },
   location: {
     city: "La Paz",
     country: "Bolivia",
@@ -58,8 +62,23 @@ set(refDatabase, {
 //     console.log("Changing attributes didn't worked well: ", e);
 //   });
 
-// Removing data
+// ***Removing data
 // refDatabase = ref(appDatabase);
 // remove(refDatabase)
 //   .then(() => console.log("removed Data is Single"))
 //   .catch((e) => console.log("error while removing data", e));
+
+// ***Updating data
+
+// update(ref(appDatabase), {
+//   name: "Alejandro",
+//   age: 23,
+//   job: "Software Developer", // Adding new data
+//   isSingle: null, // removing data
+// });
+
+update(refDatabase, {
+  stressLevel: 9,
+  "job/company": "Amazon",
+  "location/city": "Seattle",
+});
