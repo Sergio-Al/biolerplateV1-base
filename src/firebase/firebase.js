@@ -8,6 +8,7 @@ import {
   update,
   onValue,
   off,
+  push,
 } from "firebase/database";
 
 const firebaseConfig = {
@@ -24,21 +25,53 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const appDatabase = getDatabase(app);
-let refDatabase = ref(appDatabase);
+let expensesRef = ref(appDatabase, "expenses");
+
+push(expensesRef, {
+  description: "Gum",
+  note: "This is a data",
+  amount: 2343,
+  createdAt: 34234200,
+});
+
+push(expensesRef, {
+  description: "Rent",
+  note: "This is data from rent",
+  amount: 233,
+  createdAt: 343242300,
+});
+
+push(expensesRef, {
+  description: "Credit Card",
+  note: "This is data from credit card",
+  amount: 34322,
+  createdAt: 343240000,
+});
+
+// remove(ref(appDatabase, "notes/-Mkc5CTZkelWV2qiWr75"));
+
+// update(ref(appDatabase, "notes/-Mkc3Ym5exYSEv11zZLG"), {
+//   body: "Buy drink",
+// });
+
+// push(ref(appDatabase, "notes"), {
+//   title: "Course finished",
+//   body: "React",
+// });
 
 // ***Getting content from firebase
 
-onValue(ref(appDatabase), (snapshot) => {
-  const value = snapshot.val();
-  console.log(`${value.name} is a ${value.job.title} at ${value.job.company}`);
-});
+// onValue(ref(appDatabase), (snapshot) => {
+//   const value = snapshot.val();
+//   console.log(`${value.name} is a ${value.job.title} at ${value.job.company}`);
+// });
 
-setTimeout(() => {
-  set(ref(appDatabase, "job"), {
-    title: "Web Developer",
-    company: "Tesla",
-  });
-}, 3000);
+// setTimeout(() => {
+//   set(ref(appDatabase, "job"), {
+//     title: "Web Developer",
+//     company: "Tesla",
+//   });
+// }, 3000);
 
 // const onValueChange = onValue(
 //   refDatabase,
