@@ -7,6 +7,8 @@ import {
   removeExpense,
 } from "../../actions/expenses";
 import expenses from "../fixtures/expenses";
+import database from "../../firebase/firebase";
+import { ref, onValue } from "firebase/database";
 
 const createMockStore = configureMockStore([thunk]);
 
@@ -41,16 +43,65 @@ test("should add expenses to database and store", (done) => {
     description: "mouse",
     amount: 300,
     note: "this one is better",
-    craetedAt: 100,
+    createdAt: 100,
   };
 
   store.dispatch(startAddExpense(expenseData)).then(() => {
-    expect(1).toBe(1);
-    done(); // forces jest to wait this function to complete
+    const actions = store.getActions(); // get all action as array
+    expect(actions[0]).toEqual({
+      type: "ADD_EXPENSE",
+      expense: {
+        id: expect.any(String),
+        ...expenseData,
+      },
+    });
+
+    onValue(
+      ref(database, `expenses/${actions[0].expense.id}`),
+      (snapshot) => {
+        expect(snapshot.val()).toEqual(expenseData);
+        done(); // forces jest to wait this function to complete
+      },
+      {
+        onlyOnce: true,
+      }
+    );
   });
 });
 
-test("should add expense with default to database store", () => {});
+test("should add expense with default to database store", (done) => {
+  const store = createMockStore();
+  const expenseDataDefault = {
+    description: "",
+    amount: 0,
+    note: "",
+    createdAt: 0,
+  };
+
+  store.dispatch(startAddExpense({})).then(() => {
+    // testing adding to redux store
+    const actions = store.getActions();
+    expect(actions[0]).toEqual({
+      type: "ADD_EXPENSE",
+      expense: {
+        id: expect.any(String),
+        ...expenseDataDefault,
+      },
+    });
+
+    // testing adding to firebase through onValue onlyOnce function
+    onValue(
+      ref(database, `expenses/${actions[0].expense.id}`),
+      (snapshot) => {
+        expect(snapshot.val()).toEqual(expenseDataDefault);
+        done();
+      },
+      {
+        onlyOnce: true,
+      }
+    );
+  });
+});
 
 // test("should setup add expenses action object with default values", () => {
 //   const action = addExpense();
