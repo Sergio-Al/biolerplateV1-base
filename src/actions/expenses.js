@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import db from "../firebase/firebase";
-import { ref, push, onValue, remove } from "firebase/database";
+import { ref, push, onValue, remove, update } from "firebase/database";
 import expenses from "../reducers/expenses";
 
 // ADD_EXPENSE
@@ -53,6 +53,14 @@ export const editExpense = (id, updates) => ({
   id,
   updates,
 });
+
+export const startEditExpense = (id, updates) => {
+  return (dispatch) => {
+    return update(ref(db, `expenses/${id}`), updates).then(() => {
+      dispatch(editExpense(id, updates));
+    });
+  };
+};
 
 // SET_EXPENSES
 export const setExpenses = (expenses) => ({
