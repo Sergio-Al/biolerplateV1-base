@@ -31,6 +31,29 @@ test("should setup remove expense action object", () => {
   });
 });
 
+test("should remove expenses from firebase", (done) => {
+  const store = createMockStore();
+
+  store.dispatch(startRemoveExpense(expenses[2])).then(() => {
+    const actions = store.getActions();
+    expect(actions[0]).toEqual({
+      type: "REMOVE_EXPENSE",
+      id: expenses[2].id,
+    });
+
+    onValue(
+      ref(database, `expenses/${actions[0].id}`),
+      (snapshot) => {
+        expect(snapshot.val()).toBeFalsy();
+        done();
+      },
+      {
+        onlyOnce: true,
+      }
+    );
+  });
+});
+
 test("should setup edit expense action object", () => {
   const action = editExpense("123bca", { note: "this is new value" });
   expect(action).toEqual({
@@ -131,29 +154,5 @@ test("should fetch the expense from firebase", (done) => {
       expenses,
     });
     done();
-  });
-});
-
-test("should remove expenses from firebase", () => {
-  const store = createMockStore();
-
-  store.dispatch(startRemoveExpense(expenses[2])).then(() => {
-    const actions = store.getActions();
-    expect(actions[0]).toEqual({
-      type: "REMOVE_EXPENSE",
-      id: expenses[2].id,
-    });
-
-    onValue(
-      ref(database, `expenses/${actions[0].id}`),
-      (snapshot) => {
-        console.log("this is working?");
-        expect(snapshot.val()).toBeNull();
-        done();
-      },
-      {
-        onlyOnce: true,
-      }
-    );
   });
 });
