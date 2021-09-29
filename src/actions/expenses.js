@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import db from "../firebase/firebase";
-import { ref, push } from "firebase/database";
+import { ref, push, onValue } from "firebase/database";
+import expenses from "../reducers/expenses";
 
 // ADD_EXPENSE
 export const addExpense = (expense) => ({
@@ -48,7 +49,31 @@ export const editExpense = (id, updates) => ({
 // SET_EXPENSES
 export const setExpenses = (expenses) => ({
   type: "SET_EXPENSES",
-  expenses
-})
+  expenses,
+});
 
 //export const startSetExpenses;
+export const startSetExpenses = () => {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      onValue(
+        ref(db, "expenses"),
+        (snapshot) => {
+          const expensesData = [];
+
+          snapshot.forEach((childSnapshot) => {
+            expensesData.push({
+              id: childSnapshot.key,
+              ...childSnapshot.val(),
+            });
+          });
+
+          resolve(dispatch(setExpenses(expensesData)));
+        },
+        {
+          onlyOnce: true,
+        }
+      );
+    });
+  };
+};
