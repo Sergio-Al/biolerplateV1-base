@@ -11,6 +11,7 @@ import "normalize.css/normalize.css";
 import "./styles/styles.scss";
 import "react-dates/lib/css/_datepicker.css"; // this is from expenseform component file, we moved here because we'll use this in other files too
 import "./firebase/firebase";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 
 const store = ConfigureStore();
 
@@ -24,4 +25,12 @@ ReactDOM.render(<p>Loading...</p>, document.getElementById("app"));
 
 store.dispatch(startSetExpenses()).then(() => {
   ReactDOM.render(jsx, document.getElementById("app"));
+});
+
+onAuthStateChanged(getAuth(), (user) => {
+  if (user) {
+    console.log("log in ");
+  } else {
+    console.log("log out");
+  }
 });
