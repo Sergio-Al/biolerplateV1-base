@@ -2,11 +2,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux"; // Provide store to all components
-import AppRouter from "./routes/AppRouter";
+import AppRouter, { history } from "./routes/AppRouter";
 import ConfigureStore from "./store/configureStore";
 import { startSetExpenses } from "./actions/expenses";
-import { setTextFilter } from "./actions/filters";
-import getVisibleExpenses from "./selectors/expenses";
 import "normalize.css/normalize.css";
 import "./styles/styles.scss";
 import "react-dates/lib/css/_datepicker.css"; // this is from expenseform component file, we moved here because we'll use this in other files too
@@ -21,16 +19,26 @@ const jsx = (
   </Provider>
 );
 
-ReactDOM.render(<p>Loading...</p>, document.getElementById("app"));
+let hasRenderer = false;
+const renderApp = () => {
+  if (!hasRenderer) {
+    ReactDOM.render(jsx, document.getElementById("app"));
+    hasRenderer = true;
+  }
+};
 
-store.dispatch(startSetExpenses()).then(() => {
-  ReactDOM.render(jsx, document.getElementById("app"));
-});
+ReactDOM.render(<p>Loading...</p>, document.getElementById("app"));
 
 onAuthStateChanged(getAuth(), (user) => {
   if (user) {
-    console.log("log in ");
+    store.dispatch(startSetExpenses()).then(() => {
+      renderApp();
+      if (history.location.pathname === "/") {
+        history.push("/dashboard");
+      }
+    });
   } else {
-    console.log("log out");
+    renderApp();
+    history.push("/");
   }
 });
