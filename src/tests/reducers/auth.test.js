@@ -5,7 +5,7 @@ test("should set default state", () => {
   expect(state).toEqual({});
 });
 
-test("should login user", () => {
+test("should set uid for login user", () => {
   const action = {
     type: "LOGIN",
     uid: "user1234",
@@ -14,7 +14,7 @@ test("should login user", () => {
   expect(state).toEqual({ uid: action.uid });
 });
 
-test("should logout user", () => {
+test("should set uid for logout user", () => {
   const action = {
     type: "LOGOUT",
   };

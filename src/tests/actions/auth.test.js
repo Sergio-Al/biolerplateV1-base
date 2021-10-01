@@ -1,6 +1,6 @@
 import { login, startLogin, logout, startLogout } from "../../actions/auth";
 
-test("should login correctly", () => {
+test("should generate login action object", () => {
   const uidUser = "user123";
   const action = login(uidUser);
   expect(action).toEqual({
@@ -14,7 +14,7 @@ test("should startLogin correctly", (done) => {
   done();
 });
 
-test("should logout correclty", () => {
+test("should generate logout action", () => {
   const action = logout();
   expect(action).toEqual({
     type: "LOGOUT",
