@@ -10,11 +10,8 @@ export const addExpense = (expense) => ({
 });
 
 export const startAddExpense = (expenseData = {}) => {
-  // we are returning a function that redux will exetutes
-  // if is a traditional return function (not for redux) this could not work as expected
-  // this is called internally by redux with dispatch as parameter (redux puts a dispatch as parameter in our return funcion)
-  // this return function executes firebase operation first then dispatch to our redux store
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const uid = getState().auth.uid;
     const {
       description = "",
       note = "",
@@ -23,7 +20,7 @@ export const startAddExpense = (expenseData = {}) => {
     } = expenseData;
     const expense = { description, note, amount, createdAt };
 
-    return push(ref(db, "expenses"), expense).then((ref) => {
+    return push(ref(db, `users/${uid}/expenses`), expense).then((ref) => {
       dispatch(
         addExpense({
           id: ref.key,
@@ -40,8 +37,9 @@ export const removeExpense = (id) => ({
   id,
 });
 export const startRemoveExpense = ({ id } = {}) => {
-  return (dispatch) => {
-    return remove(ref(db, `expenses/${id}`)).then(() =>
+  return (dispatch, getState) => {
+    const uid = getState().auth.uid;
+    return remove(ref(db, `users/${uid}/expenses/${id}`)).then(() =>
       dispatch(removeExpense(id))
     );
   };
@@ -55,8 +53,9 @@ export const editExpense = (id, updates) => ({
 });
 
 export const startEditExpense = (id, updates) => {
-  return (dispatch) => {
-    return update(ref(db, `expenses/${id}`), updates).then(() => {
+  return (dispatch, getState) => {
+    const uid = getState().auth.uid;
+    return update(ref(db, `users/${uid}/expenses/${id}`), updates).then(() => {
       dispatch(editExpense(id, updates));
     });
   };
@@ -70,10 +69,12 @@ export const setExpenses = (expenses) => ({
 
 //export const startSetExpenses;
 export const startSetExpenses = () => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    // Remember GetState is to get the state from redux through middleware for functions
     return new Promise((resolve, reject) => {
+      const uid = getState().auth.uid;
       onValue(
-        ref(db, "expenses"),
+        ref(db, `users/${uid}/expenses`),
         (snapshot) => {
           const expensesData = [];
 
