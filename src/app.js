@@ -5,6 +5,7 @@ import { Provider } from "react-redux"; // Provide store to all components
 import AppRouter, { history } from "./routes/AppRouter";
 import ConfigureStore from "./store/configureStore";
 import { startSetExpenses } from "./actions/expenses";
+import { login, logout } from "./actions/auth";
 import "normalize.css/normalize.css";
 import "./styles/styles.scss";
 import "react-dates/lib/css/_datepicker.css"; // this is from expenseform component file, we moved here because we'll use this in other files too
@@ -31,6 +32,8 @@ ReactDOM.render(<p>Loading...</p>, document.getElementById("app"));
 
 onAuthStateChanged(getAuth(), (user) => {
   if (user) {
+    store.dispatch(login(user.uid));
+    console.log("uid", user.uid);
     store.dispatch(startSetExpenses()).then(() => {
       renderApp();
       if (history.location.pathname === "/") {
@@ -38,6 +41,7 @@ onAuthStateChanged(getAuth(), (user) => {
       }
     });
   } else {
+    store.dispatch(logout());
     renderApp();
     history.push("/");
   }
