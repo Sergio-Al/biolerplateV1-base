@@ -12,21 +12,6 @@
 .input-group__item {
   margin-bottom: $s-size;
   margin-right: $s-size;
-  color: $dark-blue;
-  font-size: $font-size-large;
-  border-style: none;
-  input {
-    box-sizing: border-box;
-    height: 100%;
-    line-height: 1;
-    padding: 0 1rem;
-    width: 100%;
-  }
-  select {
-    height: 100%;
-    width: 100%;
-    color: $dark-blue;
-  }
 
   @media (min-width: $desktop-breakpoint) {
     margin: 0 $s-size 0 0;
