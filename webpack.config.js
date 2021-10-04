@@ -36,7 +36,7 @@ module.exports = (env, argv) => {
           test: /\.s?css$/,
           use: [
             MiniCssExtractPlugin.loader,
-            { loader: "css-loader", options: { sourceMap: true } },
+            { loader: "css-loader", options: { sourceMap: true, url: false } },
             { loader: "sass-loader", options: { sourceMap: true } },
           ],
         },
@@ -67,7 +67,7 @@ module.exports = (env, argv) => {
         ),
         "process.env.FIREBASE_APP_ID": JSON.stringify(
           process.env.FIREBASE_APP_ID
-        )
+        ),
       }),
     ],
     devtool: isProduction ? "source-map" : "inline-cheap-module-source-map",
