@@ -11,6 +11,7 @@ import "./styles/styles.scss";
 import "react-dates/lib/css/_datepicker.css"; // this is from expenseform component file, we moved here because we'll use this in other files too
 import "./firebase/firebase";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
+import LoadingPage from "./components/LoadingPage";
 
 const store = ConfigureStore();
 
@@ -28,7 +29,7 @@ const renderApp = () => {
   }
 };
 
-ReactDOM.render(<p>Loading...</p>, document.getElementById("app"));
+ReactDOM.render(<LoadingPage />, document.getElementById("app"));
 
 onAuthStateChanged(getAuth(), (user) => {
   if (user) {
